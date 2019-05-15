@@ -1,0 +1,55 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+apply from: '../dependencies.gradle'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.jakoon.babylon"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            buildConfigField "String", "API_BASE_URL", "\"http://jsonplaceholder.typicode.com\""
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "API_BASE_URL", "\"http://jsonplaceholder.typicode.com\""
+        }
+    }
+}
+
+dependencies {
+    implementation kotlinDependencies.kotlinStdlib
+    implementation presentationDependencies.appCompat
+    implementation presentationDependencies.constraintLayout
+
+    implementation kotlinDependencies.ktx
+    implementation kotlinDependencies.kotlinCoroutines
+    implementation kotlinDependencies.kotlinCoroutinesAndroid
+
+    implementation domainDependencies.dagger
+    implementation domainDependencies.daggerAndroid
+    implementation domainDependencies.daggerAndroidSupport
+
+    implementation domainDependencies.moshi
+    implementation domainDependencies.retrofit
+    implementation domainDependencies.retrofitMoshiConverter
+
+    kapt aptDependencies.daggerCompiler
+    kapt aptDependencies.daggerProcessor
+    kapt aptDependencies.moshiCodegen
+
+    // TODO
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+}
