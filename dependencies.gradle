@@ -9,7 +9,7 @@ ext {
 
     // Domain
     daggerVersion = '2.22.1'
-    retrofitVersion = '2.5.0'
+    retrofitVersion = '2.6.0-SNAPSHOT'
     moshiVersion = '1.8.0'
 
     presentationDependencies = [
