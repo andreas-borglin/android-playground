@@ -1,7 +1,8 @@
-package com.jakoon.babylon
+package com.jakoon.babylon.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.jakoon.babylon.R
 
 class MainActivity : AppCompatActivity() {
 

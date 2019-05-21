@@ -25,6 +25,8 @@ android {
             buildConfigField "String", "API_BASE_URL", "\"http://jsonplaceholder.typicode.com/\""
         }
     }
+    dataBinding.enabled = true
+    testOptions.unitTests.returnDefaultValues = true
 }
 
 dependencies {
@@ -35,6 +37,12 @@ dependencies {
 
     implementation presentationDependencies.appCompat
     implementation presentationDependencies.constraintLayout
+    implementation presentationDependencies.groupie
+    implementation presentationDependencies.groupieKotlin
+    implementation presentationDependencies.groupieDataBinding
+
+    implementation domainDependencies.lifecycleExtensions
+    implementation domainDependencies.lifecycleViewModelKtx
 
     implementation domainDependencies.koinAndroid
     implementation domainDependencies.koinAndroidScope
@@ -52,4 +60,7 @@ dependencies {
     testImplementation testDependencies.koinTest
     testImplementation testDependencies.kotlinCoroutinesTest
     testImplementation testDependencies.assertJ
+    testImplementation testDependencies.archCoreTest
+    testImplementation testDependencies.mockito
+    testImplementation testDependencies.liveDataTest
 }
