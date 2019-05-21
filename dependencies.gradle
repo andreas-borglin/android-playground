@@ -11,6 +11,12 @@ ext {
     daggerVersion = '2.22.1'
     retrofitVersion = '2.6.0-SNAPSHOT'
     moshiVersion = '1.8.0'
+    koinVersion = '2.0.0-GA4'
+
+    // Test
+    junitVersion = '4.12'
+    assertJVersion = '3.11.1'
+    kotlinCoroutinesTest = '1.2.1'
 
     presentationDependencies = [
             appCompat       : "androidx.appcompat:appcompat:$appCompatVersion",
@@ -30,12 +36,22 @@ ext {
             daggerAndroidSupport  : "com.google.dagger:dagger-android-support:$daggerVersion",
             moshi                 : "com.squareup.moshi:moshi:$moshiVersion",
             retrofit              : "com.squareup.retrofit2:retrofit:$retrofitVersion",
-            retrofitMoshiConverter: "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+            retrofitMoshiConverter: "com.squareup.retrofit2:converter-moshi:$retrofitVersion",
+            koinAndroid           : "org.koin:koin-android:$koinVersion",
+            koinAndroidScope      : "org.koin:koin-android-scope:$koinVersion",
+            koinAndroidViewModel  : "org.koin:koin-android-viewmodel:$koinVersion",
     ]
 
     aptDependencies = [
             daggerCompiler : "com.google.dagger:dagger-compiler:$daggerVersion",
             daggerProcessor: "com.google.dagger:dagger-android-processor:$daggerVersion",
             moshiCodegen   : "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+    ]
+
+    testDependencies = [
+            junit               : "junit:junit:$junitVersion",
+            assertJ             : "org.assertj:assertj-core:$assertJVersion",
+            koinTest            : "org.koin:koin-test:$koinVersion",
+            kotlinCoroutinesTest: "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutinesVersion"
     ]
 }

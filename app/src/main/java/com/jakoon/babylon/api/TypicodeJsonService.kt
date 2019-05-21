@@ -2,7 +2,7 @@ package com.jakoon.babylon.api
 
 import retrofit2.http.GET
 
-interface TypicodeJsonApi {
+interface TypicodeJsonService {
 
     @GET("posts")
     suspend fun getPosts(): List<Post>

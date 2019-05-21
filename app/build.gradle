@@ -29,16 +29,16 @@ android {
 
 dependencies {
     implementation kotlinDependencies.kotlinStdlib
-    implementation presentationDependencies.appCompat
-    implementation presentationDependencies.constraintLayout
-
     implementation kotlinDependencies.ktx
     implementation kotlinDependencies.kotlinCoroutines
     implementation kotlinDependencies.kotlinCoroutinesAndroid
 
-    implementation domainDependencies.dagger
-    implementation domainDependencies.daggerAndroid
-    implementation domainDependencies.daggerAndroidSupport
+    implementation presentationDependencies.appCompat
+    implementation presentationDependencies.constraintLayout
+
+    implementation domainDependencies.koinAndroid
+    implementation domainDependencies.koinAndroidScope
+    implementation domainDependencies.koinAndroidViewModel
 
     implementation domainDependencies.moshi
     implementation domainDependencies.retrofit
@@ -48,8 +48,8 @@ dependencies {
     kapt aptDependencies.daggerProcessor
     kapt aptDependencies.moshiCodegen
 
-    // TODO
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.koinTest
+    testImplementation testDependencies.kotlinCoroutinesTest
+    testImplementation testDependencies.assertJ
 }
