@@ -3,6 +3,7 @@ ext {
     appCompatVersion = '1.0.2'
     constraintLayoutVersion = '1.1.3'
     groupieVersion = '2.3.0'
+    navigationVersion = '2.1.0-alpha04'
 
     // Kotlin
     ktxVersion = '1.0.1'
@@ -29,6 +30,8 @@ ext {
             groupie           : "com.xwray:groupie:$groupieVersion",
             groupieKotlin     : "com.xwray:groupie-kotlin-android-extensions:$groupieVersion",
             groupieDataBinding: "com.xwray:groupie-databinding:$groupieVersion",
+            navigationFragment: "androidx.navigation:navigation-fragment-ktx:$navigationVersion",
+            navigationUi      : "androidx.navigation:navigation-ui-ktx:$navigationVersion"
     ]
 
     kotlinDependencies = [
