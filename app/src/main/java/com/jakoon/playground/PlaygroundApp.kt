@@ -1,17 +1,17 @@
-package com.jakoon.babylon
+package com.jakoon.playground
 
 import android.app.Application
-import com.jakoon.babylon.di.appModule
+import com.jakoon.playground.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 
-class BabylonApp : Application() {
+class PlaygroundApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            androidContext(this@BabylonApp)
+            androidContext(this@PlaygroundApp)
             modules(appModule)
         }
     }

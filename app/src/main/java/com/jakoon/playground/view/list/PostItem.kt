@@ -1,8 +1,8 @@
-package com.jakoon.babylon.view.list
+package com.jakoon.playground.view.list
 
-import com.jakoon.babylon.R
-import com.jakoon.babylon.api.Post
-import com.jakoon.babylon.databinding.ListPostItemBinding
+import com.jakoon.playground.R
+import com.jakoon.playground.api.Post
+import com.jakoon.playground.databinding.ListPostItemBinding
 import com.xwray.groupie.databinding.BindableItem
 
 class PostItem(val post: Post) : BindableItem<ListPostItemBinding>() {

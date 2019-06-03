@@ -1,4 +1,4 @@
-package com.jakoon.babylon.api
+package com.jakoon.playground.api
 
 import com.squareup.moshi.JsonClass
 

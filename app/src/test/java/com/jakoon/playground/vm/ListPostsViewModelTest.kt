@@ -1,10 +1,10 @@
-package com.jakoon.babylon.vm
+package com.jakoon.playground.vm
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.jakoon.babylon.api.Post
-import com.jakoon.babylon.api.TypicodeJsonService
-import com.jakoon.babylon.di.appModule
-import com.jakoon.babylon.testModule
+import com.jakoon.playground.api.Post
+import com.jakoon.playground.api.TypicodeJsonService
+import com.jakoon.playground.di.appModule
+import com.jakoon.playground.testModule
 import com.jraska.livedata.test
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Unconfined
@@ -78,5 +78,13 @@ class ListPostsViewModelTest : KoinTest {
         viewModel.refreshPosts()
 
         verify(apiService, times(1)).getPosts()
+    }
+
+    @Test
+    fun blarp() {
+        println((1..10).filter { it == 2 })
+        for (i in 10 until 15) {
+            println(i)
+        }
     }
 }

@@ -1,8 +1,17 @@
 # android-playground
 Exploration of the latest Android technologies, patterns and libraries.
 
-**Note** - Very much in early experimental stages.
+**Note** - Purely early experimental stages
 
-This project is my personal playground for trying out new Android concepts and technologies.
+This project is my personal playground for trying out Android concepts and technologies.
 
-The current code is primarily a basic illustration of a MVVM architecture with Kotlin, coroutines, LiveData and Retrofit coroutine integration to fetch JSON data from a remote server.
+I'm used to working with RxJava and Dagger, and wanted to see what a MVVM based
+architecture would look like using coroutines and Koin instead and how it affects testability.
+
+The current code is a basic experiment with
+- Kotlin + coroutines
+- MVVM architecture
+- DI with Koin
+- Jetpack navigation
+- LiveData 
+- Retrofit coroutine integration to fetch JSON data from a remote server.

@@ -1,4 +1,4 @@
-package com.jakoon.babylon.view.detail
+package com.jakoon.playground.view.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import com.jakoon.babylon.R
-import com.jakoon.babylon.databinding.FragmentPostDetailsBinding
-import com.jakoon.babylon.json.postFromJson
+import com.jakoon.playground.R
+import com.jakoon.playground.databinding.FragmentPostDetailsBinding
+import com.jakoon.playground.json.postFromJson
 
 
 class PostDetailsFragment : Fragment() {

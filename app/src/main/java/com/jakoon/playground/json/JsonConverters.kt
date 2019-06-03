@@ -1,6 +1,6 @@
-package com.jakoon.babylon.json
+package com.jakoon.playground.json
 
-import com.jakoon.babylon.api.Post
+import com.jakoon.playground.api.Post
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 

@@ -3,12 +3,12 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/nav_graph" app:startDestination="@id/listPostsFragment">
 
-    <fragment android:id="@+id/listPostsFragment" android:name="com.jakoon.babylon.view.list.ListPostsFragment"
+    <fragment android:id="@+id/listPostsFragment" android:name="com.jakoon.playground.view.list.ListPostsFragment"
               android:label="ListPostsFragment">
         <action android:id="@+id/action_listPostsFragment_to_postDetailsFragment"
                 app:destination="@id/postDetailsFragment"/>
     </fragment>
-    <fragment android:id="@+id/postDetailsFragment" android:name="com.jakoon.babylon.view.detail.PostDetailsFragment"
+    <fragment android:id="@+id/postDetailsFragment" android:name="com.jakoon.playground.view.detail.PostDetailsFragment"
               android:label="PostDetailsFragment">
         <argument android:name="post" app:argType="string"/>
     </fragment>

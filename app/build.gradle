@@ -9,7 +9,7 @@ apply from: '../dependencies.gradle'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.jakoon.babylon"
+        applicationId "com.jakoon.playground"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1

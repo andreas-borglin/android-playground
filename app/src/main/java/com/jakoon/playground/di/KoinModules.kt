@@ -1,8 +1,8 @@
-package com.jakoon.babylon.di
+package com.jakoon.playground.di
 
-import com.jakoon.babylon.BuildConfig
-import com.jakoon.babylon.api.TypicodeJsonService
-import com.jakoon.babylon.vm.ListPostsViewModel
+import com.jakoon.playground.BuildConfig
+import com.jakoon.playground.api.TypicodeJsonService
+import com.jakoon.playground.vm.ListPostsViewModel
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit

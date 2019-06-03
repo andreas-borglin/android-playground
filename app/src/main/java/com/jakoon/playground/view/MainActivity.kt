@@ -1,8 +1,8 @@
-package com.jakoon.babylon.view
+package com.jakoon.playground.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.jakoon.babylon.R
+import com.jakoon.playground.R
 
 class MainActivity : AppCompatActivity() {
 

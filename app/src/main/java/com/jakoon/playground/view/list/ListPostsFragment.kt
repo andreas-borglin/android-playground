@@ -1,4 +1,4 @@
-package com.jakoon.babylon.view.list
+package com.jakoon.playground.view.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,10 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.jakoon.babylon.R
-import com.jakoon.babylon.databinding.FragmentListPostsBinding
-import com.jakoon.babylon.json.toJson
-import com.jakoon.babylon.vm.ListPostsViewModel
+import com.jakoon.playground.R
+import com.jakoon.playground.databinding.FragmentListPostsBinding
+import com.jakoon.playground.json.toJson
+import com.jakoon.playground.vm.ListPostsViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder

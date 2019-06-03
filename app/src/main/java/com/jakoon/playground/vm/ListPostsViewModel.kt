@@ -1,11 +1,11 @@
-package com.jakoon.babylon.vm
+package com.jakoon.playground.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jakoon.babylon.api.Post
-import com.jakoon.babylon.api.TypicodeJsonService
+import com.jakoon.playground.api.Post
+import com.jakoon.playground.api.TypicodeJsonService
 import kotlinx.coroutines.launch
 
 

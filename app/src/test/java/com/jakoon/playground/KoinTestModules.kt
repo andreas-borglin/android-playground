@@ -1,6 +1,6 @@
-package com.jakoon.babylon
+package com.jakoon.playground
 
-import com.jakoon.babylon.api.TypicodeJsonService
+import com.jakoon.playground.api.TypicodeJsonService
 import org.koin.dsl.module
 import org.mockito.Mockito.mock
 
