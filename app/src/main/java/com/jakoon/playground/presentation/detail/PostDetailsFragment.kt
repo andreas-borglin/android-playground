@@ -1,4 +1,4 @@
-package com.jakoon.playground.view.detail
+package com.jakoon.playground.presentation.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,8 +14,8 @@ import com.jakoon.playground.json.postFromJson
 
 class PostDetailsFragment : Fragment() {
 
-    lateinit var binding: FragmentPostDetailsBinding
-    val args: PostDetailsFragmentArgs by navArgs()
+    private lateinit var binding: FragmentPostDetailsBinding
+    private val args: PostDetailsFragmentArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_details, container, false)

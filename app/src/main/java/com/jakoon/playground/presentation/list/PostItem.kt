@@ -1,7 +1,7 @@
-package com.jakoon.playground.view.list
+package com.jakoon.playground.presentation.list
 
 import com.jakoon.playground.R
-import com.jakoon.playground.api.Post
+import com.jakoon.playground.model.Post
 import com.jakoon.playground.databinding.ListPostItemBinding
 import com.xwray.groupie.databinding.BindableItem
 

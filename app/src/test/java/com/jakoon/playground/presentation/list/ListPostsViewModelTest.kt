@@ -1,9 +1,10 @@
-package com.jakoon.playground.vm
+package com.jakoon.playground.presentation.list
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.jakoon.playground.api.Post
-import com.jakoon.playground.api.TypicodeJsonService
 import com.jakoon.playground.di.appModule
+import com.jakoon.playground.model.Post
+import com.jakoon.playground.repository.DataRetrievalOutcome
+import com.jakoon.playground.repository.Repository
 import com.jakoon.playground.testModule
 import com.jraska.livedata.test
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +33,7 @@ class ListPostsViewModelTest : KoinTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
-    val apiService by inject<TypicodeJsonService>()
+    val repository by inject<Repository>()
     val viewModel by inject<ListPostsViewModel>()
     val testPost = Post(1, 2, "title", "body")
 
@@ -48,7 +49,7 @@ class ListPostsViewModelTest : KoinTest {
     }
 
     fun mockServicePosts() = runBlockingTest {
-        Mockito.`when`(apiService.getPosts()).thenReturn(Arrays.asList(testPost))
+        Mockito.`when`(repository.getPosts()).thenReturn(DataRetrievalOutcome.Success(Arrays.asList(testPost)))
     }
 
     @Test
@@ -58,7 +59,7 @@ class ListPostsViewModelTest : KoinTest {
         viewModel.getPosts().test().awaitValue()
         viewModel.getPosts().test().awaitValue()
 
-        verify(apiService, times(1)).getPosts()
+        verify(repository, times(1)).getPosts()
     }
 
     @Test
@@ -77,14 +78,6 @@ class ListPostsViewModelTest : KoinTest {
 
         viewModel.refreshPosts()
 
-        verify(apiService, times(1)).getPosts()
-    }
-
-    @Test
-    fun blarp() {
-        println((1..10).filter { it == 2 })
-        for (i in 10 until 15) {
-            println(i)
-        }
+        verify(repository, times(1)).getPosts()
     }
 }

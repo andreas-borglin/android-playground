@@ -1,5 +1,8 @@
-package com.jakoon.playground.api
+package com.jakoon.playground.data.network
 
+import com.jakoon.playground.model.Comment
+import com.jakoon.playground.model.Post
+import com.jakoon.playground.model.User
 import retrofit2.http.GET
 
 interface TypicodeJsonService {
