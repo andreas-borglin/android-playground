@@ -3,7 +3,7 @@ package com.jakoon.playground.presentation.list
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.jakoon.playground.di.appModule
 import com.jakoon.playground.model.Post
-import com.jakoon.playground.repository.DataRetrievalOutcome
+import com.jakoon.playground.repository.DataResult
 import com.jakoon.playground.repository.Repository
 import com.jakoon.playground.testModule
 import com.jraska.livedata.test
@@ -33,9 +33,9 @@ class ListPostsViewModelTest : KoinTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
-    val repository by inject<Repository>()
-    val viewModel by inject<ListPostsViewModel>()
-    val testPost = Post(1, 2, "title", "body")
+    private val repository by inject<Repository>()
+    private val viewModel by inject<ListPostsViewModel>()
+    private val testPost = Post(1, 2, "title", "body")
 
     @Before
     fun setUp() {
@@ -48,13 +48,17 @@ class ListPostsViewModelTest : KoinTest {
         stopKoin()
     }
 
-    fun mockServicePosts() = runBlockingTest {
-        Mockito.`when`(repository.getPosts()).thenReturn(DataRetrievalOutcome.Success(Arrays.asList(testPost)))
+    fun mockRepositorySuccess() = runBlockingTest {
+        Mockito.`when`(repository.getPosts()).thenReturn(DataResult.Success(Arrays.asList(testPost)))
+    }
+
+    fun mockRepositoryFailure() = runBlockingTest {
+        Mockito.`when`(repository.getPosts()).thenReturn(DataResult.Failure(Exception()))
     }
 
     @Test
     fun `getPosts() should fetch posts from API service only when no data is cached`() = runBlockingTest {
-        mockServicePosts()
+        mockRepositorySuccess()
 
         viewModel.getPosts().test().awaitValue()
         viewModel.getPosts().test().awaitValue()
@@ -64,20 +68,33 @@ class ListPostsViewModelTest : KoinTest {
 
     @Test
     fun `getPosts() should return data as provided by API service`() = runBlockingTest {
-        mockServicePosts()
+        mockRepositorySuccess()
 
-        val value = viewModel.getPosts().value
+        val value = viewModel.getPosts().value!!
 
-        assertThat(value).isNotNull()
-        assertThat(value!![0]).isEqualTo(testPost)
+        assertThat(value).isInstanceOf(DataResult.Success::class.java)
+        assertThat((value as DataResult.Success).list[0]).isEqualTo(testPost)
     }
 
     @Test
-    fun `refreshPosts() should call API service`() = runBlockingTest {
-        mockServicePosts()
+    fun `refreshPosts() should call API service with refresh flag set`() = runBlockingTest {
+        mockRepositorySuccess()
 
         viewModel.refreshPosts()
 
-        verify(repository, times(1)).getPosts()
+        verify(repository, times(1)).getPosts(refresh = true)
+    }
+
+    @Test
+    fun `getPosts() should re-fetch data if previous call returned failure`() = runBlockingTest {
+        mockRepositoryFailure()
+
+        val value = viewModel.getPosts().value!!
+        assertThat(value).isInstanceOf(DataResult.Failure::class.java)
+
+        mockRepositorySuccess()
+        viewModel.getPosts().test().awaitValue()
+
+        verify(repository, times(2)).getPosts()
     }
 }

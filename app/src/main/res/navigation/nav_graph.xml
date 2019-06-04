@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/nav_graph" app:startDestination="@id/listPostsFragment">
+            android:id="@+id/nav_graph"
+            app:startDestination="@id/listPostsFragment">
 
-    <fragment android:id="@+id/listPostsFragment" android:name="com.jakoon.playground.presentation.list.ListPostsFragment"
-              android:label="ListPostsFragment">
-        <action android:id="@+id/action_listPostsFragment_to_postDetailsFragment"
+    <fragment
+            android:id="@+id/listPostsFragment"
+            android:name="com.jakoon.playground.presentation.list.ListPostsFragment"
+            android:label="Posts">
+        <action
+                android:id="@+id/action_list_to_details"
                 app:destination="@id/postDetailsFragment"/>
     </fragment>
-    <fragment android:id="@+id/postDetailsFragment" android:name="com.jakoon.playground.presentation.detail.PostDetailsFragment"
-              android:label="PostDetailsFragment">
-        <argument android:name="post" app:argType="string"/>
+    <fragment
+            android:id="@+id/postDetailsFragment"
+            android:name="com.jakoon.playground.presentation.detail.PostDetailsFragment"
+            android:label="Post Details">
+        <argument
+                android:name="post"
+                app:argType="string"/>
     </fragment>
 </navigation>

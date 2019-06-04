@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -11,8 +12,10 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jakoon.playground.R
 import com.jakoon.playground.databinding.FragmentListPostsBinding
 import com.jakoon.playground.json.toJson
+import com.jakoon.playground.repository.DataResult
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
@@ -25,21 +28,24 @@ class ListPostsFragment : Fragment() {
     private val viewModel: ListPostsViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding =
-            DataBindingUtil.inflate(inflater, com.jakoon.playground.R.layout.fragment_list_posts, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_posts, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val section = setupRecyclerView(view)
 
-        viewModel.getPosts().observe(this, Observer { list ->
-            section.update(list.map { PostItem(it) })
+        viewModel.getPosts().observe(this, Observer { result ->
+            when (result) {
+                is DataResult.Success -> section.update(result.list.map { PostItem(it) })
+                is DataResult.Failure -> binding.errorMessage.isVisible = true
+            }
+            binding.swipeToRefresh.isRefreshing = false
         })
 
-        viewModel.errors.observe(this, Observer {
-            // TODO show error
-        })
+        binding.swipeToRefresh.setOnRefreshListener {
+            viewModel.refreshPosts()
+        }
     }
 
     private fun setupRecyclerView(view: View): Section {
@@ -52,12 +58,11 @@ class ListPostsFragment : Fragment() {
         adapter.add(section)
         binding.postsList.adapter = adapter
 
+        binding.swipeToRefresh.setColorSchemeResources(R.color.colorPrimary)
+
         adapter.setOnItemClickListener { item, _ ->
             val postItem = item as PostItem
-            val action =
-                ListPostsFragmentDirections.actionListPostsFragmentToPostDetailsFragment(
-                    postItem.post.toJson()
-                )
+            val action = ListPostsFragmentDirections.actionListToDetails(postItem.post.toJson())
             view.findNavController().navigate(action)
         }
         return section

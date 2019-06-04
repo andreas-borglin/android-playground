@@ -11,32 +11,33 @@ import kotlinx.coroutines.withContext
 
 class Repository(val apiService: TypicodeJsonService, val cache: Cache) {
 
-    suspend fun getPosts(): DataRetrievalOutcome<Post> = withContext(Dispatchers.IO) {
-        getData(cache.posts) { apiService.getPosts() }
+    suspend fun getPosts(refresh: Boolean = false): DataResult<Post> = withContext(Dispatchers.IO) {
+        getData(refresh, cache.posts) { apiService.getPosts() }
     }
 
-    suspend fun getUsers(): DataRetrievalOutcome<User> = withContext(Dispatchers.IO) {
-        getData(cache.users) { apiService.getUsers() }
+    suspend fun getUsers(refresh: Boolean = false): DataResult<User> = withContext(Dispatchers.IO) {
+        getData(refresh, cache.users) { apiService.getUsers() }
     }
 
-    suspend fun getComments(): DataRetrievalOutcome<Comment> = withContext(Dispatchers.IO) {
-        getData(cache.comments) { apiService.getComments() }
+    suspend fun getComments(refresh: Boolean = false): DataResult<Comment> = withContext(Dispatchers.IO) {
+        getData(refresh, cache.comments) { apiService.getComments() }
     }
 
     private inline fun <reified T> getData(
+        forceRefresh: Boolean,
         cachedData: MutableList<T>,
         apiCall: () -> List<T>
-    ): DataRetrievalOutcome<T> {
+    ): DataResult<T> {
         return try {
-            if (cachedData.isNotEmpty()) {
-                DataRetrievalOutcome.Success(cachedData)
+            if (!forceRefresh && cachedData.isNotEmpty()) {
+                DataResult.Success(cachedData)
             } else {
                 val list = apiCall()
                 cachedData.addAll(list)
-                DataRetrievalOutcome.Success(list)
+                DataResult.Success(list)
             }
         } catch (t: Throwable) {
-            DataRetrievalOutcome.Failure(t)
+            DataResult.Failure(t)
         }
     }
 
