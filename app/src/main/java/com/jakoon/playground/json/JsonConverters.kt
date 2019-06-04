@@ -9,4 +9,4 @@ val postAdapter: JsonAdapter<Post> = moshi.adapter(Post::class.java)
 
 fun Post.toJson() = postAdapter.toJson(this)
 
-fun postFromJson(json: String) = postAdapter.fromJson(json)
+fun postFromJson(json: String): Post = postAdapter.fromJson(json)!!

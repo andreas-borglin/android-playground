@@ -21,7 +21,6 @@ import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
 import org.koin.android.viewmodel.ext.android.viewModel
 
-
 class ListPostsFragment : Fragment() {
 
     private lateinit var binding: FragmentListPostsBinding
@@ -37,7 +36,7 @@ class ListPostsFragment : Fragment() {
 
         viewModel.getPosts().observe(this, Observer { result ->
             when (result) {
-                is DataResult.Success -> section.update(result.list.map { PostItem(it) })
+                is DataResult.Success -> section.update(result.data.map { PostItem(it) })
                 is DataResult.Failure -> binding.errorMessage.isVisible = true
             }
             binding.swipeToRefresh.isRefreshing = false

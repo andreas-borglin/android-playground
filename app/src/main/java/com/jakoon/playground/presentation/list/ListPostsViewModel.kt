@@ -10,11 +10,11 @@ import com.jakoon.playground.repository.Repository
 import kotlinx.coroutines.launch
 
 
-internal class ListPostsViewModel(val repository: Repository) : ViewModel() {
+internal class ListPostsViewModel(private val repository: Repository) : ViewModel() {
 
-    private val postResults = MutableLiveData<DataResult<Post>>()
+    private val postResults = MutableLiveData<DataResult<List<Post>>>()
 
-    fun getPosts(): LiveData<DataResult<Post>> {
+    fun getPosts(): LiveData<DataResult<List<Post>>> {
         if (postResults.value == null || postResults.value is DataResult.Failure) {
             fetchPosts()
         }
@@ -28,8 +28,7 @@ internal class ListPostsViewModel(val repository: Repository) : ViewModel() {
     }
 
     fun refreshPosts() {
-        viewModelScope.launch {
-            postResults.value = repository.getPosts(refresh = true)
-        }
+        repository.clearCache()
+        fetchPosts()
     }
 }

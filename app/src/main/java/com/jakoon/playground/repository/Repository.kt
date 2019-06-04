@@ -2,40 +2,48 @@ package com.jakoon.playground.repository
 
 import com.jakoon.playground.data.cache.Cache
 import com.jakoon.playground.data.network.TypicodeJsonService
-import com.jakoon.playground.model.Comment
 import com.jakoon.playground.model.Post
-import com.jakoon.playground.model.User
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 
 
-class Repository(val apiService: TypicodeJsonService, val cache: Cache) {
+class Repository(val apiService: TypicodeJsonService, val cache: Cache, val dispatcher: CoroutineDispatcher) {
 
-    suspend fun getPosts(refresh: Boolean = false): DataResult<Post> = withContext(Dispatchers.IO) {
-        getData(refresh, cache.posts) { apiService.getPosts() }
+    fun clearCache() = cache.clear()
+
+    suspend fun getPosts(): DataResult<List<Post>> = withContext(dispatcher) {
+        cache.getCachedPosts()?.let { DataResult.Success(it) }
+            ?: getData(cache = { cache.setCachedPosts(it) }, apiCall = { apiService.getPosts() })
     }
 
-    suspend fun getUsers(refresh: Boolean = false): DataResult<User> = withContext(Dispatchers.IO) {
-        getData(refresh, cache.users) { apiService.getUsers() }
-    }
+    suspend fun getPostDetails(post: Post): DataResult<Post> = withContext(dispatcher) {
+        if (post.hasDetails()) {
+            DataResult.Success(post)
+        } else {
+            // TODO this scope allows us to return failure on exception - but is it the right way?
+            supervisorScope {
+                try {
+                    val userCall = async { apiService.getUser(post.userId) }
+                    val commentsCall = async { apiService.getComments(post.id) }
 
-    suspend fun getComments(refresh: Boolean = false): DataResult<Comment> = withContext(Dispatchers.IO) {
-        getData(refresh, cache.comments) { apiService.getComments() }
-    }
-
-    private inline fun <reified T> getData(
-        forceRefresh: Boolean,
-        cachedData: MutableList<T>,
-        apiCall: () -> List<T>
-    ): DataResult<T> {
-        return try {
-            if (!forceRefresh && cachedData.isNotEmpty()) {
-                DataResult.Success(cachedData)
-            } else {
-                val list = apiCall()
-                cachedData.addAll(list)
-                DataResult.Success(list)
+                    post.user = userCall.await()[0]
+                    post.comments = commentsCall.await()
+                    DataResult.Success(post)
+                } catch (t: Throwable) {
+                    DataResult.Failure<Post>(t)
+                }
             }
+        }
+    }
+
+    // TODO unnecessary allocation of lamdba for cache when not used
+    private inline fun <T> getData(cache: (T) -> Unit = {}, apiCall: () -> T): DataResult<T> {
+        return try {
+            val list = apiCall()
+            cache(list)
+            DataResult.Success(list)
         } catch (t: Throwable) {
             DataResult.Failure(t)
         }

@@ -4,8 +4,10 @@ import com.jakoon.playground.BuildConfig
 import com.jakoon.playground.data.cache.Cache
 import com.jakoon.playground.data.cache.InMemoryCache
 import com.jakoon.playground.data.network.TypicodeJsonService
+import com.jakoon.playground.presentation.detail.PostDetailsViewModel
 import com.jakoon.playground.presentation.list.ListPostsViewModel
 import com.jakoon.playground.repository.Repository
+import kotlinx.coroutines.Dispatchers
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -26,8 +28,9 @@ val appModule = module {
     }
 
     single {
-        Repository(get(), get())
+        Repository(get(), get(), Dispatchers.IO)
     }
 
     viewModel { ListPostsViewModel(get()) }
+    viewModel { PostDetailsViewModel(get()) }
 }

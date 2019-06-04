@@ -3,7 +3,16 @@ package com.jakoon.playground.model
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Post(val id: Int, val userId: Int, val title: String, val body: String)
+data class Post(
+    val id: Int,
+    val userId: Int,
+    val title: String,
+    val body: String,
+    var user: User? = null,
+    var comments: List<Comment>? = null
+) {
+    fun hasDetails(): Boolean = user != null && comments != null
+}
 
 @JsonClass(generateAdapter = true)
 data class User(
