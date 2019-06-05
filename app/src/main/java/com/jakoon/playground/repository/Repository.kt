@@ -11,6 +11,7 @@ import kotlinx.coroutines.withContext
 
 class Repository(val apiService: TypicodeJsonService, val cache: Cache, val dispatcher: CoroutineDispatcher) {
 
+    // TODO is there a race condition between this and getPosts?
     fun clearCache() = cache.clear()
 
     suspend fun getPosts(): DataResult<List<Post>> = withContext(dispatcher) {

@@ -7,7 +7,7 @@
     <fragment
             android:id="@+id/listPostsFragment"
             android:name="com.jakoon.playground.presentation.list.ListPostsFragment"
-            android:label="Posts">
+            android:label="@string/posts_title">
         <action
                 android:id="@+id/action_list_to_details"
                 app:destination="@id/postDetailsFragment"/>
@@ -15,7 +15,7 @@
     <fragment
             android:id="@+id/postDetailsFragment"
             android:name="com.jakoon.playground.presentation.detail.PostDetailsFragment"
-            android:label="Post Details">
+            android:label="@string/post_details_title">
         <argument
                 android:name="post"
                 app:argType="string"/>

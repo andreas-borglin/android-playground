@@ -1,10 +1,11 @@
 package com.jakoon.playground.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.jakoon.playground.*
 import com.jakoon.playground.data.cache.Cache
 import com.jakoon.playground.data.network.TypicodeJsonService
 import com.jakoon.playground.di.appModule
+import com.jakoon.playground.test.shared.*
+import com.jakoon.playground.testModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -18,9 +19,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.Mockito
-import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
 
 
@@ -30,6 +28,8 @@ class RepositoryTest : KoinTest {
     val typicodeService by inject<TypicodeJsonService>()
     val cache by inject<Cache>()
     lateinit var repository: Repository
+    lateinit var serviceTestActions: ServiceTestActions
+    lateinit var cacheTestActions: CacheTestActions
 
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
@@ -38,36 +38,13 @@ class RepositoryTest : KoinTest {
     fun setUp() {
         startKoin { modules(appModule, testModule) }
         repository = Repository(typicodeService, cache, Dispatchers.Unconfined)
+        serviceTestActions = ServiceTestActions(typicodeService)
+        cacheTestActions = CacheTestActions(cache)
     }
 
     @After
     fun tearDown() {
         stopKoin()
-    }
-
-    fun mockNoCache() {
-        Mockito.`when`(cache.getCachedPosts()).thenReturn(null)
-    }
-
-    fun mockCache() {
-        Mockito.`when`(cache.getCachedPosts()).thenReturn(testPosts)
-    }
-
-    fun mockSuccessfulGetPosts() = runBlockingTest {
-        Mockito.`when`(typicodeService.getPosts()).thenReturn(testPosts)
-    }
-
-    fun mockFailedGetPosts() = runBlockingTest {
-        Mockito.`when`(typicodeService.getPosts()).thenThrow(IllegalStateException::class.java)
-    }
-
-    fun mockSuccessfulGetPostDetails() = runBlockingTest {
-        Mockito.`when`(typicodeService.getUser(anyInt())).thenReturn(testUsers)
-        Mockito.`when`(typicodeService.getComments(anyInt())).thenReturn(testComments)
-    }
-
-    fun mockFailedGetPostDetails() = runBlockingTest {
-        Mockito.`when`(typicodeService.getUser(anyInt())).thenThrow(IllegalStateException::class.java)
     }
 
     @Test
@@ -79,40 +56,40 @@ class RepositoryTest : KoinTest {
 
     @Test
     fun `getPosts() should fetch from service if not cached`() = runBlockingTest {
-        mockNoCache()
-        mockSuccessfulGetPosts()
+        cacheTestActions.mockEmptyCache()
+        serviceTestActions.mockSuccessfulGetPosts(postsList)
 
         val result = repository.getPosts()
 
         assertThat(result).isInstanceOf(DataResult.Success::class.java)
-        verify(typicodeService).getPosts()
+        serviceTestActions.verifyGetPostsCalled()
     }
 
     @Test
     fun `getPosts() should use cached posts if available`() = runBlockingTest {
-        mockCache()
+        cacheTestActions.mockCachedPosts(postsList)
 
         val result = repository.getPosts()
 
         assertThat(result).isInstanceOf(DataResult.Success::class.java)
-        verify(cache).getCachedPosts()
-        verify(typicodeService, never()).getPosts()
+        cacheTestActions.verifyGetCachedPostsCalled()
+        serviceTestActions.verifyGetPostsCalled(0)
     }
 
     @Test
     fun `getPosts() should cache fetched posts`() = runBlockingTest {
-        mockNoCache()
-        mockSuccessfulGetPosts()
+        cacheTestActions.mockEmptyCache()
+        serviceTestActions.mockSuccessfulGetPosts(postsList)
 
         repository.getPosts()
 
-        verify(cache).setCachedPosts(testPosts)
+        cacheTestActions.verifySetCachedPostsCalled(postsList)
     }
 
     @Test
     fun `getPosts() should return failure if API call throws exception`() = runBlockingTest {
-        mockNoCache()
-        mockFailedGetPosts()
+        cacheTestActions.mockEmptyCache()
+        serviceTestActions.mockFailedGetPosts()
 
         val result = repository.getPosts()
 
@@ -120,34 +97,34 @@ class RepositoryTest : KoinTest {
     }
 
     @Test
-    fun `getPostDetails() should return input parameter if details are cached`() = runBlockingTest {
+    fun `getPostDetails() should return input Post object if details are already set`() = runBlockingTest {
 
-        val result = repository.getPostDetails(testPostWithDetails)
+        val result = repository.getPostDetails(postWithDetails)
 
-        assertThat(result).isEqualTo(DataResult.Success(testPostWithDetails))
-        verify(typicodeService, never()).getUser(anyInt())
+        assertThat(result).isEqualTo(DataResult.Success(postWithDetails))
+        serviceTestActions.verifyGetUser(postWithDetails.userId, 0)
     }
 
     @Test
     fun `getPostDetails() should fetch user and comments from API service`() = runBlockingTest {
-        mockSuccessfulGetPostDetails()
+        serviceTestActions.mockSuccessfulGetPostDetails(user, comments)
 
-        val result = repository.getPostDetails(testPost)
+        val result = repository.getPostDetails(post1)
 
         assertThat(result).isInstanceOf(DataResult.Success::class.java)
         val post = (result as DataResult.Success).data
-        assertThat(post.user).isEqualTo(fakeUser)
-        assertThat(post.comments).isEqualTo(testComments)
+        assertThat(post.user).isEqualTo(user)
+        assertThat(post.comments).isEqualTo(comments)
 
-        verify(typicodeService).getUser(testPost.userId)
-        verify(typicodeService).getComments(testPost.id)
+        serviceTestActions.verifyGetUser(post1.userId)
+        serviceTestActions.verifyGetComments(post1.id)
     }
 
     @Test
     fun `getPostDetails() should return failure if API call throws exception`() = runBlockingTest {
-        mockFailedGetPostDetails()
+        serviceTestActions.mockFailedGetPostDetails()
 
-        val result = repository.getPostDetails(testPost)
+        val result = repository.getPostDetails(post1)
 
         assertThat(result).isInstanceOf(DataResult.Failure::class.java)
     }

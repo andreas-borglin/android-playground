@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Playground</string>
     <string name="posts_failed">A network error occurred trying to fetch the lists of posts</string>
+    <string name="post_details_failed">Failed to fetch post details</string>
+    <string name="posts_title">Posts</string>
+    <string name="post_details_title">Post Details</string>
 </resources>

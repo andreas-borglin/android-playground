@@ -14,7 +14,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.jakoon.playground.PlaygroundTestRunner"
     }
     buildTypes {
         debug {
@@ -27,7 +27,16 @@ android {
         }
     }
     dataBinding.enabled = true
-    testOptions.unitTests.returnDefaultValues = true
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
+    }
+    sourceSets {
+        androidTest.java.srcDirs += "src/testShared/java"
+        test.java.srcDirs += "src/testShared/java"
+    }
 }
 
 dependencies {
@@ -46,6 +55,7 @@ dependencies {
 
     implementation domainDependencies.lifecycleExtensions
     implementation domainDependencies.lifecycleViewModelKtx
+    implementation domainDependencies.liveDataKtx
 
     implementation domainDependencies.koinAndroid
     implementation domainDependencies.koinAndroidScope
@@ -55,15 +65,30 @@ dependencies {
     implementation domainDependencies.retrofit
     implementation domainDependencies.retrofitMoshiConverter
 
-    kapt aptDependencies.daggerCompiler
-    kapt aptDependencies.daggerProcessor
     kapt aptDependencies.moshiCodegen
 
+    debugImplementation('androidx.fragment:fragment-testing:1.1.0-alpha09') {
+        exclude group: 'androidx.test', module: 'core'
+    }
     testImplementation testDependencies.junit
+    testImplementation testDependencies.androidXTest
+    testImplementation testDependencies.androidXTestRunner
+    testImplementation testDependencies.androidXTestRules
+    testImplementation testDependencies.androidXTestExtJunit
     testImplementation testDependencies.koinTest
     testImplementation testDependencies.kotlinCoroutinesTest
     testImplementation testDependencies.assertJ
     testImplementation testDependencies.archCoreTest
     testImplementation testDependencies.mockito
     testImplementation testDependencies.liveDataTest
+
+    androidTestImplementation testDependencies.androidXTest
+    androidTestImplementation testDependencies.androidXTestRunner
+    androidTestImplementation testDependencies.androidXTestRules
+    androidTestImplementation testDependencies.androidXTestExtJunit
+    androidTestImplementation testDependencies.espressoCore
+    androidTestImplementation testDependencies.espressoContrib
+    androidTestImplementation(testDependencies.koinTest) { exclude group: 'org.mockito' }
+    androidTestImplementation testDependencies.kotlinCoroutinesTest
+    androidTestImplementation testDependencies.mockitoAndroid
 }

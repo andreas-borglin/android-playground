@@ -33,7 +33,7 @@ class PostDetailsFragment : Fragment() {
         viewModel.getPostDetails(post).observe(this, Observer {
             when (it) {
                 is DataResult.Success -> populatePostDetails(it.data)
-                is DataResult.Failure -> binding.title.text = "Failed to fetch post details"
+                is DataResult.Failure -> binding.title.text = getString(R.string.post_details_failed)
             }
         })
     }

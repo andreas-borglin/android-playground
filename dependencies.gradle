@@ -13,16 +13,20 @@ ext {
     daggerVersion = '2.22.1'
     retrofitVersion = '2.6.0-SNAPSHOT'
     moshiVersion = '1.8.0'
-    koinVersion = '2.0.0-GA4'
+    koinVersion = '2.0.0'
     lifecycleVersion = '2.2.0-alpha01'
 
     // Test
     junitVersion = '4.12'
+    androidXTestVersion = '1.2.0'
+    androidXTestExtJunitVersion = '1.1.1'
     assertJVersion = '3.11.1'
+    espressoVersion = '3.2.0'
     kotlinCoroutinesTest = '1.2.1'
     architectureCoreTestingVersion = '1.1.1'
     mockitoVersion = '2.27.0'
     liveDataTestVersion = '1.1.0'
+    fragmentTestingVersion = '1.1.0-alpha09'
 
     presentationDependencies = [
             appCompat         : "androidx.appcompat:appcompat:$appCompatVersion",
@@ -53,6 +57,7 @@ ext {
             koinAndroidViewModel  : "org.koin:koin-android-viewmodel:$koinVersion",
             lifecycleExtensions   : "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion",
             lifecycleViewModelKtx : "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
+            liveDataKtx           : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
     ]
 
     aptDependencies = [
@@ -63,11 +68,19 @@ ext {
 
     testDependencies = [
             junit               : "junit:junit:$junitVersion",
+            androidXTest        : "androidx.test:core:$androidXTestVersion",
+            androidXTestRunner  : "androidx.test:runner:$androidXTestVersion",
+            androidXTestRules   : "androidx.test:rules:$androidXTestVersion",
+            androidXTestExtJunit: "androidx.test.ext:junit:$androidXTestExtJunitVersion",
+            espressoCore        : "androidx.test.espresso:espresso-core:$espressoVersion",
+            espressoContrib     : "androidx.test.espresso:espresso-contrib:$espressoVersion",
+            fragmentTesting     : "androidx.fragment:fragment-testing:$fragmentTestingVersion",
             assertJ             : "org.assertj:assertj-core:$assertJVersion",
             koinTest            : "org.koin:koin-test:$koinVersion",
             kotlinCoroutinesTest: "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutinesVersion",
             archCoreTest        : "android.arch.core:core-testing:$architectureCoreTestingVersion",
             mockito             : "org.mockito:mockito-core:$mockitoVersion",
+            mockitoAndroid      : "org.mockito:mockito-android:$mockitoVersion",
             liveDataTest        : "com.jraska.livedata:testing-ktx:$liveDataTestVersion"
     ]
 }
